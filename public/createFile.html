@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create File</title>
+</head>
+<body>
+    <h2>Create File</h2>
+    <form id="createForm">
+        <label for="filename">Filename:</label>
+        <input type="text" id="filename" name="filename" required><br><br>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" required></textarea><br><br>
+        <label for="password">Password (optional):</label>
+        <input type="password" id="password" name="password"><br><br>
+        <button type="button" onclick="createFile()">Create File</button>
+    </form>
+
+    <p id="message" style="display: none; color: green;">Done!</p>
+
+    <script>
+        function createFile() {
+            var filename = document.getElementById("filename").value;
+            var content = document.getElementById("content").value;
+            var password = document.getElementById("password").value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8080/createFile");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        console.log("File created successfully");
+                        document.getElementById("message").style.display = "block";
+                    } else {
+                        console.error("Error:", xhr.responseText);
+                    }
+                }
+            };
+            xhr.send(JSON.stringify({ filename: filename, content: content, password: password }));
+        }
+    </script>
+</body>
+</html>

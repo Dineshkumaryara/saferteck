@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get File Content</title>
+</head>
+<body>
+    <h2>Get File Content</h2>
+    <form id="getFileForm">
+        <label for="filename">Filename:</label>
+        <input type="text" id="filename" name="filename" required><br><br>
+        <label for="password">Password (optional):</label>
+        <input type="password" id="password" name="password"><br><br>
+        <button type="submit">Get File Content</button>
+    </form>
+    <div id="fileContent"></div>
+    <script>
+        document.getElementById("getFileForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const filename = document.getElementById("filename").value;
+            const password = document.getElementById("password").value;
+            const url = `http://localhost:8080/getFile?filename=${filename}&password=${password}`;
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("File not found or unauthorized");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("fileContent").innerText = data.content;
+                })
+                .catch(error => {
+                    document.getElementById("fileContent").innerText = "Error: " + error.message;
+                });
+        });
+    </script>
+</body>
+</html>

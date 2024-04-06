@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploaded Files</title>
+</head>
+<body>
+    <h2>Uploaded Files</h2>
+    <div id="fileList"></div>
+    <script>
+        fetch("http://localhost:8080/getFiles")
+            .then(response => response.json())
+            .then(data => {
+                const fileList = document.getElementById("fileList");
+                fileList.innerHTML = "<h3>File List:</h3>";
+                data.files.forEach(file => {
+                    fileList.innerHTML += `<p>${file}</p>`;
+                });
+            })
+            .catch(error => console.error("Error fetching files:", error));
+    </script>
+</body>
+</html>
